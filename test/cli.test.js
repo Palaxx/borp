@@ -88,3 +88,18 @@ test('gh reporter', async () => {
 
   strictEqual(stdout.indexOf('::notice') >= 0, true)
 })
+
+// test.only('no timeout option', { timeout: 61000 }, async (t) => {
+//   const cwd = join(import.meta.url, '..', 'fixtures', 'notimeout')
+//   await rm(path.join(cwd, 'dist'), { recursive: true, force: true })
+//
+//   const { stdout } = await execa('node', [
+//     borp,
+//     '--no-timeout'
+//   ], {
+//     cwd
+//   })
+//
+//   console.log('stdout', stdout)
+//   strictEqual(stdout.indexOf('✔ should pass after 31 seconds') >= 0, true)
+// })

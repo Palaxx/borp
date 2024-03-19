@@ -1,6 +1,5 @@
 #! /usr/bin/env node
 
-import { parseArgs } from 'node:util'
 import Reporters from 'node:test/reporters'
 import { mkdtemp, rm, readFile } from 'node:fs/promises'
 import { createWriteStream } from 'node:fs'
@@ -8,6 +7,7 @@ import { finished } from 'node:stream/promises'
 import { join, relative } from 'node:path'
 import posix from 'node:path/posix'
 import runWithTypeScript from './lib/run.js'
+import parseArguments from './lib/parseArguments.js'
 import githubReporter from '@reporters/github'
 import { Report } from 'c8'
 import os from 'node:os'
@@ -19,29 +19,7 @@ process.on('unhandledRejection', (err) => {
   process.exit(1)
 })
 
-const args = parseArgs({
-  args: process.argv.slice(2),
-  options: {
-    only: { type: 'boolean', short: 'o' },
-    watch: { type: 'boolean', short: 'w' },
-    pattern: { type: 'string', short: 'p' },
-    concurrency: { type: 'string', short: 'c', default: os.availableParallelism() - 1 + '' },
-    coverage: { type: 'boolean', short: 'C' },
-    timeout: { type: 'string', short: 't', default: '30000' },
-    'coverage-exclude': { type: 'string', short: 'X', multiple: true },
-    ignore: { type: 'string', short: 'i', multiple: true },
-    'expose-gc': { type: 'boolean' },
-    help: { type: 'boolean', short: 'h' },
-    'no-typescript': { type: 'boolean', short: 'T' },
-    reporter: {
-      type: 'string',
-      short: 'r',
-      default: ['spec'],
-      multiple: true
-    }
-  },
-  allowPositionals: true
-})
+const args = parseArguments()
 
 /* c8 ignore next 5 */
 if (args.values.help) {
@@ -61,14 +39,6 @@ if (args.values['expose-gc'] && typeof global.gc !== 'function') {
   } catch (error) {
     process.exit(1)
   }
-}
-
-if (args.values.concurrency) {
-  args.values.concurrency = parseInt(args.values.concurrency)
-}
-
-if (args.values.timeout) {
-  args.values.timeout = parseInt(args.values.timeout)
 }
 
 let covDir

@@ -27,7 +27,7 @@ Borp will automatically run all tests files matching `*.test.{js|ts}`.
 │   ├── lib
 │   │   └── add.ts
 │   └── test
-│       └── add.test.ts
+│       └── notimeout.test.ts
 └── tsconfig.json
 
 ```
@@ -40,7 +40,7 @@ export function add (x: number, y: number): number {
 }
 ```
 
-and a `src/test/add.test.ts` file:
+and a `src/test/notimeout.test.ts` file:
 
 ```typescript
 import { test } from 'node:test'
